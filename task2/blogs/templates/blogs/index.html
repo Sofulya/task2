@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .blog-container {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .blog-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.2s;
+    }
+
+    .blog-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .blog-title {
+        font-size: 1.5rem;
+        color: #0077ff;
+        margin-bottom: 10px;
+    }
+
+    .blog-text {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .blog-footer {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .blog-date {
+        font-size: 0.9rem;
+        color: #888;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #0077ff;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #005bb5;
+    }
+</style>
+<div class="container">
+    <h2 class="page-title">Блог</h2>
+    <div class="blog-container">
+        {% for post in posts %}
+        <div class="blog-card">
+            <h3 class="blog-title">{{ post.title }}</h3>
+            <p class="blog-text">{{ post.text|slice:":100" }}...</p>
+            <div class="blog-footer">
+                <span class="blog-date">Добавлен{{ post.date_added|date:"d M Y H:i" }}</span>
+                {% if user.is_authenticated %}
+                <a href="{% url 'edit_post' post.id %}" class="btn btn-primary">Редактировать</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if user.is_authenticated %}
+    <div class="new-post-button">
+        <a href="{% url 'new_post' %}" class="btn btn-primary">Добавить новый блог</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
